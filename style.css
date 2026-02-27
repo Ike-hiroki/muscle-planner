@@ -1,0 +1,492 @@
+/* === リセット & ベース === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --success: #16a34a;
+  --success-light: #dcfce7;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --danger-light: #fee2e2;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-800);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* === ヘッダー === */
+.app-header {
+  background: var(--primary);
+  color: white;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* === タブナビゲーション === */
+.tab-nav {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px 4px;
+  border: none;
+  background: white;
+  color: var(--gray-500);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* === タブコンテンツ === */
+.tab-content {
+  display: none;
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* === カード === */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.optional {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  font-weight: 400;
+}
+
+/* === フォーム === */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--gray-600);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--gray-800);
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-group input::placeholder {
+  color: var(--gray-400);
+}
+
+/* === ボタン === */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 20px;
+  background: white;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--primary-light);
+}
+
+/* === メッセージ === */
+.message {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.message.success {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.message.error {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+/* === 通知 === */
+.notice {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray-500);
+}
+
+.notice p {
+  margin-bottom: 16px;
+}
+
+/* === 日セレクター === */
+.day-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.day-nav {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--gray-300);
+  border-radius: 50%;
+  background: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.day-nav:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.day-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  min-width: 120px;
+  text-align: center;
+}
+
+/* === メニューカード === */
+.exercise-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.exercise-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.exercise-target {
+  font-size: 0.75rem;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.exercise-detail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.detail-item {
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--gray-50);
+  border-radius: 8px;
+}
+
+.detail-label {
+  font-size: 0.7rem;
+  color: var(--gray-500);
+  display: block;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.weight-change {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+.weight-up { color: var(--success); }
+.weight-same { color: var(--gray-400); }
+.weight-down { color: var(--danger); }
+
+.exercise-tip {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  padding: 8px 12px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-light);
+}
+
+/* === 記録フォーム === */
+.record-date {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 16px;
+}
+
+.record-exercise {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+
+.record-exercise-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 12px;
+}
+
+.record-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.record-set {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.set-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  width: 50px;
+}
+
+.record-set input {
+  padding: 8px 10px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 100%;
+}
+
+.record-set input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* === 履歴 === */
+.history-day {
+  background: white;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.history-day-header {
+  padding: 12px 16px;
+  background: var(--gray-50);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  border-bottom: 1px solid var(--gray-200);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-day-header:hover {
+  background: var(--gray-100);
+}
+
+.history-toggle {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  transition: transform 0.2s;
+}
+
+.history-day.open .history-toggle {
+  transform: rotate(180deg);
+}
+
+.history-day-body {
+  display: none;
+  padding: 12px 16px;
+}
+
+.history-day.open .history-day-body {
+  display: block;
+}
+
+.history-exercise {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.history-exercise:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.history-exercise-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 4px;
+}
+
+.history-set-list {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+/* === ユーティリティ === */
+.hidden {
+  display: none !important;
+}
+
+/* === レスポンシブ === */
+@media (min-width: 768px) {
+  .tab-btn {
+    font-size: 0.9rem;
+    padding: 14px 8px;
+  }
+
+  .exercise-detail {
+    gap: 12px;
+  }
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscle Planner</title>
+  <meta name="description" content="筋トレメニュー自動生成 & 記録アプリ">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Muscle">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="app-title">Muscle Planner</h1>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="profile">プロフィール</button>
+    <button class="tab-btn" data-tab="menu">今日のメニュー</button>
+    <button class="tab-btn" data-tab="record">記録</button>
+    <button class="tab-btn" data-tab="history">履歴</button>
+  </nav>
+
+  <!-- プロフィール設定画面 -->
+  <section id="profile" class="tab-content active">
+    <div class="card">
+      <h2 class="card-title">基本情報</h2>
+      <div class="form-group">
+        <label for="height">身長 (cm)</label>
+        <input type="number" id="height" placeholder="170" min="100" max="250" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="weight">体重 (kg)</label>
+        <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="age">年齢</label>
+        <input type="number" id="age" placeholder="25" min="10" max="100">
+      </div>
+      <div class="form-group">
+        <label for="gender">性別</label>
+        <select id="gender">
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">体組成 <span class="optional">（任意）</span></h2>
+      <div class="form-group">
+        <label for="bodyFat">体脂肪率 (%)</label>
+        <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="muscleMass">骨格筋量 (kg)</label>
+        <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">トレーニング設定</h2>
+      <div class="form-group">
+        <label for="frequency">週のトレーニング頻度</label>
+        <select id="frequency">
+          <option value="2">週2回</option>
+          <option value="3" selected>週3回</option>
+          <option value="4">週4回</option>
+          <option value="5">週5回</option>
+          <option value="6">週6回</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="level">トレーニング経験</label>
+        <select id="level">
+          <option value="beginner">初心者（〜1年）</option>
+          <option value="intermediate">中級者（1〜3年）</option>
+          <option value="advanced">上級者（3年〜）</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="saveProfile" class="btn-primary">プロフィールを保存</button>
+    <div id="profileMessage" class="message hidden"></div>
+  </section>
+
+  <!-- 今日のメニュー画面 -->
+  <section id="menu" class="tab-content">
+    <div id="menuNotice" class="notice hidden">
+      <p>プロフィールを設定してメニューを生成してください。</p>
+      <button class="btn-secondary" data-tab="profile">プロフィールを設定</button>
+    </div>
+    <div id="menuDaySelector" class="day-selector hidden">
+      <button id="prevDay" class="day-nav">&lt;</button>
+      <span id="currentDay" class="day-label">Day 1</span>
+      <button id="nextDay" class="day-nav">&gt;</button>
+    </div>
+    <div id="menuContent"></div>
+    <button id="startTraining" class="btn-primary hidden">このメニューでトレーニング開始</button>
+  </section>
+
+  <!-- トレーニング記録画面 -->
+  <section id="record" class="tab-content">
+    <div id="recordNotice" class="notice hidden">
+      <p>まずメニューを生成してからトレーニングを記録しましょう。</p>
+    </div>
+    <div id="recordDate" class="record-date"></div>
+    <div id="recordContent"></div>
+    <button id="saveRecord" class="btn-primary hidden">記録を保存</button>
+    <div id="recordMessage" class="message hidden"></div>
+  </section>
+
+  <!-- 記録履歴画面 -->
+  <section id="history" class="tab-content">
+    <div id="historyNotice" class="notice hidden">
+      <p>まだトレーニング記録がありません。</p>
+    </div>
+    <div id="historyContent"></div>
+  </section>
+
+  <script src="data/exercises.js"></script>
+  <script src="data/programs.js"></script>
+  <script src="modules/profile.js"></script>
+  <script src="modules/generator.js"></script>
+  <script src="modules/recorder.js"></script>
+  <script src="modules/adjuster.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>
