@@ -23,6 +23,12 @@ const Recorder = {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(records));
   },
 
+  // 記録を削除
+  deleteRecord(date) {
+    const records = this.getAllRecords().filter(r => r.date !== date);
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(records));
+  },
+
   // 特定の日付の記録を取得
   getRecordByDate(date) {
     const records = this.getAllRecords();
@@ -59,6 +65,41 @@ const Recorder = {
     return now.getFullYear() + '-' +
       String(now.getMonth() + 1).padStart(2, '0') + '-' +
       String(now.getDate()).padStart(2, '0');
+  },
+
+  // === 体組成記録 ===
+  BODY_COMP_KEY: 'mp_bodycomp',
+
+  saveBodyComp(record) {
+    const records = this.getBodyCompRecords();
+    const existingIndex = records.findIndex(r => r.date === record.date);
+    if (existingIndex >= 0) {
+      records[existingIndex] = record;
+    } else {
+      records.push(record);
+    }
+    records.sort((a, b) => b.date.localeCompare(a.date));
+    localStorage.setItem(this.BODY_COMP_KEY, JSON.stringify(records));
+  },
+
+  getBodyCompRecords() {
+    const data = localStorage.getItem(this.BODY_COMP_KEY);
+    return data ? JSON.parse(data) : [];
+  },
+
+  // 特定の種目の過去最大重量を取得
+  getMaxWeightForExercise(exerciseId) {
+    const records = this.getAllRecords();
+    let maxWeight = 0;
+    for (const record of records) {
+      const exercise = record.exercises.find(e => e.id === exerciseId);
+      if (exercise) {
+        for (const set of exercise.sets) {
+          if (set.weight > maxWeight) maxWeight = set.weight;
+        }
+      }
+    }
+    return maxWeight;
   },
 
   // 日付を表示用フォーマットに変換

@@ -1,5 +1,5 @@
 // Service Worker - オフライン対応 & キャッシュ管理
-const CACHE_NAME = 'muscle-planner-v2';
+const CACHE_NAME = 'muscle-planner-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './app.js',
   './data/exercises.js',
   './data/programs.js',
+  './data/illustrations.js',
   './modules/profile.js',
   './modules/generator.js',
   './modules/recorder.js',

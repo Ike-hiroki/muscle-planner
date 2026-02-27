@@ -19,11 +19,88 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- プロフィール設定画面 -->
-  <section id="profile" class="tab-content active">
+
+  <!-- WORKOUT（メニュー表示 + インライン記録） -->
+  <section id="workout" class="tab-content active">
     <div class="screen-header">
-      <h1>Profile</h1>
-      <p class="screen-subtitle">あなたの情報を入力</p>
+      <h1>Workout</h1>
+    </div>
+    <div id="workoutNotice" class="notice hidden">
+      <div class="notice-icon">&#128170;</div>
+      <p>まずプロフィールを設定してメニューを生成しましょう</p>
+      <button class="btn-ghost" data-tab="settings">プロフィール設定</button>
+    </div>
+    <!-- 週の達成 -->
+    <div id="weekProgress" class="week-progress hidden">
+      <div class="week-header">
+        <span class="week-title">今週</span>
+        <span class="week-count" id="weekCount">0 / 0</span>
+      </div>
+      <div class="week-dots" id="weekDots"></div>
+    </div>
+    <div id="workoutDaySelector" class="day-selector hidden">
+      <button id="prevDay" class="day-nav">&#8249;</button>
+      <span id="currentDay" class="day-label">Day 1</span>
+      <button id="nextDay" class="day-nav">&#8250;</button>
+    </div>
+    <div id="workoutSummary" class="menu-summary summary-2col hidden">
+      <div class="summary-item">
+        <span class="summary-value" id="wkExCount">0</span>
+        <span class="summary-label">種目数</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-value" id="wkTime">-</span>
+        <span class="summary-label">想定所要時間</span>
+      </div>
+    </div>
+    <div id="workoutContent"></div>
+    <button id="saveWorkout" class="btn-primary hidden">記録を保存</button>
+    <div id="workoutMessage" class="message hidden"></div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section id="progress" class="tab-content">
+    <div class="screen-header">
+      <h1>Progress</h1>
+      <p class="screen-subtitle">成長の軌跡</p>
+    </div>
+    <div id="progressModeToggle" class="progress-mode-toggle hidden">
+      <button class="progress-mode-btn active" data-mode="training">トレーニング</button>
+      <button class="progress-mode-btn" data-mode="bodycomp">体組成</button>
+    </div>
+    <div id="progressNotice" class="notice hidden">
+      <div class="notice-icon">&#9733;</div>
+      <p>トレーニング記録が蓄積されるとグラフが表示されます</p>
+    </div>
+    <div id="progressTabs" class="progress-tabs hidden"></div>
+    <div id="progressChart" class="chart-container hidden">
+      <canvas id="exerciseChart"></canvas>
+    </div>
+    <div id="progressStats" class="progress-stats hidden"></div>
+    <div id="bodyCompChart" class="chart-container hidden">
+      <canvas id="bodyCompCanvas"></canvas>
+    </div>
+    <div id="bodyCompStats" class="progress-stats hidden"></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="history" class="tab-content">
+    <div class="screen-header">
+      <h1>History</h1>
+      <p class="screen-subtitle">過去の記録</p>
+    </div>
+    <div id="historyNotice" class="notice hidden">
+      <div class="notice-icon">&#128197;</div>
+      <p>まだトレーニング記録がありません</p>
+    </div>
+    <div id="historyContent"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="settings" class="tab-content">
+    <div class="screen-header">
+      <h1>Settings</h1>
+      <p class="screen-subtitle">プロフィール・トレーニング設定</p>
     </div>
     <div class="card">
       <div class="form-row">
@@ -51,16 +128,17 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="bodyFat">体脂肪率 <span class="unit">%</span></label>
+          <label for="bodyFat">体脂肪率 <span class="unit">%（任意）</span></label>
           <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
         </div>
         <div class="form-group">
-          <label for="muscleMass">骨格筋量 <span class="unit">kg</span></label>
+          <label for="muscleMass">骨格筋量 <span class="unit">kg（任意）</span></label>
           <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
         </div>
       </div>
     </div>
-
+    <button id="saveBodyComp" class="btn-outline">体組成を記録</button>
+    <div id="bodyCompMessage" class="message hidden"></div>
     <div class="card">
       <div class="form-row">
         <div class="form-group">
@@ -82,104 +160,158 @@
           </select>
         </div>
       </div>
+      <div class="form-group goal-group">
+        <label for="goal">トレーニング目標</label>
+        <select id="goal">
+          <option value="hypertrophy" selected>筋肥大（バランス型）</option>
+          <option value="strength">筋力アップ（高重量・低回数）</option>
+          <option value="endurance">持久力・引き締め（低重量・高回数）</option>
+        </select>
+      </div>
     </div>
-
-    <button id="saveProfile" class="btn-primary">メニューを生成</button>
+    <button id="saveProfile" class="btn-primary">メニューを再生成</button>
     <div id="profileMessage" class="message hidden"></div>
-  </section>
 
-  <!-- 今日のメニュー画面 -->
-  <section id="menu" class="tab-content">
-    <div class="screen-header">
-      <h1>Today</h1>
-      <p class="screen-subtitle">今日のトレーニング</p>
-    </div>
-    <div id="menuNotice" class="notice hidden">
-      <div class="notice-icon">&#9881;</div>
-      <p>プロフィールを設定してメニューを生成してください</p>
-      <button class="btn-ghost" data-tab="profile">Setup Profile</button>
-    </div>
-    <div id="menuSummary" class="menu-summary hidden">
-      <div class="summary-item">
-        <span class="summary-value" id="menuExCount">0</span>
-        <span class="summary-label">種目</span>
+    <!-- 使い方ガイド -->
+    <div class="guide-section">
+      <h2 class="guide-title">使い方ガイド</h2>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="usage">
+          <span>基本的な使い方</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-usage">
+          <ol>
+            <li>この画面で身長・体重・頻度・経験レベル・目標を入力し「メニューを再生成」を押す</li>
+            <li><strong>Workout</strong> タブで今日のメニューを確認</li>
+            <li>ジムで実際にトレーニングしながら、重量・回数を修正</li>
+            <li>各セットの <strong>&#10003;</strong> をタップ → 完了マーク＋<strong>レストタイマー自動スタート</strong></li>
+            <li>セット数の増減やカスタム種目の追加も自由に可能</li>
+            <li>全種目終了後「<strong>記録を保存</strong>」を押す</li>
+            <li>次回のWorkoutでは、実績に基づいて<strong>重量が自動調整</strong>される</li>
+          </ol>
+        </div>
       </div>
-      <div class="summary-item">
-        <span class="summary-value" id="menuSetCount">0</span>
-        <span class="summary-label">セット</span>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="goals">
+          <span>トレーニング目標について</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-goals">
+          <p>目標に応じて<strong>回数・重量・休憩時間</strong>が最適化されます。</p>
+          <table class="guide-table">
+            <tr><th>目標</th><th>回数</th><th>重量</th><th>休憩</th></tr>
+            <tr><td>筋力アップ</td><td>3〜6回</td><td>高重量（85%1RM）</td><td>2〜3分</td></tr>
+            <tr><td>筋肥大</td><td>8〜12回</td><td>中重量（70%1RM）</td><td>60〜90秒</td></tr>
+            <tr><td>持久力</td><td>12〜20回</td><td>低重量（55%1RM）</td><td>30〜45秒</td></tr>
+          </table>
+          <p>迷ったら「<strong>筋肥大（バランス型）</strong>」がおすすめ。細マッチョを目指すなら最も効率的です。</p>
+        </div>
       </div>
-      <div class="summary-item">
-        <span class="summary-value" id="menuTime">0</span>
-        <span class="summary-label">分</span>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="generation">
+          <span>メニュー生成のしくみ</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-generation">
+          <p>あなたの体重と経験レベルから、種目ごとの<strong>推定1RM</strong>（1回だけ挙げられる最大重量）を算出します。</p>
+          <div class="guide-formula">推定1RM = 体重 × 種目別係数（レベルで変動）</div>
+          <div class="guide-formula">作業重量 = 推定1RM × 目標別強度</div>
+          <p>この作業重量を各マシン/バーベルの刻み幅に丸めて提案します。回数・セット数・インターバルもすべて選択した目標に応じて自動設定されます。</p>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="levels">
+          <span>経験レベルの違い</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-levels">
+          <p>経験レベルによって<strong>推定1RMの算出係数</strong>が変わります。レベルが上がるほど、より重い重量が提案されます。</p>
+          <table class="guide-table">
+            <tr><th>レベル</th><th>目安</th><th>特徴</th></tr>
+            <tr><td>初心者</td><td>0〜1年</td><td>フォーム習得を重視。軽めの重量からスタート</td></tr>
+            <tr><td>中級者</td><td>1〜3年</td><td>筋肥大を本格的に狙う。中程度の重量</td></tr>
+            <tr><td>上級者</td><td>3年以上</td><td>高重量で限界に挑戦。体重比の係数が最も高い</td></tr>
+          </table>
+          <p class="guide-example">例: ベンチプレス（体重70kgの場合）<br>初心者 → 約25kg / 中級者 → 約41kg / 上級者 → 約61kg</p>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="overload">
+          <span>重量自動調整（プログレッシブ・オーバーロード）</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-overload">
+          <p>トレーニング記録を基に、<strong>次回の推奨重量を自動で調整</strong>します。2回目のWorkoutから発動します。</p>
+          <table class="guide-table">
+            <tr><th>条件</th><th>調整</th></tr>
+            <tr><td>全セットで目標回数を達成</td><td class="guide-up">+2.5kg（重量UP）</td></tr>
+            <tr><td>1回だけ目標未達</td><td class="guide-same">同じ重量を維持</td></tr>
+            <tr><td>2回連続で目標未達</td><td class="guide-down">-2.5kg（デロード）</td></tr>
+          </table>
+          <p>少しずつ重量を上げることで、筋力と筋量を着実に増やしていく「<strong>漸進性過負荷</strong>」の原則に基づいています。</p>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="splits">
+          <span>分割法について</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-splits">
+          <p>週の頻度に応じて、最適な<strong>部位分割</strong>でメニューを構成します。</p>
+          <table class="guide-table">
+            <tr><th>頻度</th><th>分割法</th></tr>
+            <tr><td>週2回</td><td>全身A / 全身B</td></tr>
+            <tr><td>週3回</td><td>Push / Pull / Legs</td></tr>
+            <tr><td>週4回</td><td>上半身A / 下半身A / 上半身B / 下半身B</td></tr>
+            <tr><td>週5回</td><td>胸 / 背中 / 肩・腕 / 脚 / 弱点部位</td></tr>
+            <tr><td>週6回</td><td>Push×2 / Pull×2 / Legs×2</td></tr>
+          </table>
+          <p>頻度が多いほど各部位を細かく分けて集中的に鍛えられます。初心者は週3回（PPL）がおすすめです。</p>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <button class="guide-header" data-guide="tips">
+          <span>効果を高めるポイント</span>
+          <span class="guide-arrow">&#9662;</span>
+        </button>
+        <div class="guide-body" id="guide-tips">
+          <ul>
+            <li><strong>継続が最重要</strong> — 完璧なメニューより、続けることが成果を生みます</li>
+            <li><strong>フォーム優先</strong> — 重量を上げるより正しいフォームを意識しましょう</li>
+            <li><strong>睡眠と栄養</strong> — 筋肉はトレーニング中ではなく回復中に成長します</li>
+            <li><strong>タンパク質</strong> — 体重×1.6〜2.0g/日を目安に摂取しましょう</li>
+            <li><strong>記録を見返す</strong> — Progressタブで成長を確認してモチベーション維持</li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div id="menuDaySelector" class="day-selector hidden">
-      <button id="prevDay" class="day-nav">&#8249;</button>
-      <span id="currentDay" class="day-label">Day 1</span>
-      <button id="nextDay" class="day-nav">&#8250;</button>
-    </div>
-    <div id="menuContent"></div>
-    <button id="startTraining" class="btn-primary hidden">Start Training</button>
   </section>
 
-  <!-- トレーニング記録画面 -->
-  <section id="record" class="tab-content">
-    <div class="screen-header">
-      <h1>Record</h1>
-      <p class="screen-subtitle">トレーニングを記録</p>
+  <!-- レストタイマー -->
+  <div id="restTimer" class="rest-timer hidden">
+    <div class="rest-timer-bar">
+      <div class="rest-timer-progress" id="restTimerProgress"></div>
     </div>
-    <div id="recordNotice" class="notice hidden">
-      <div class="notice-icon">&#9998;</div>
-      <p>メニューを生成してトレーニングを開始しましょう</p>
+    <div class="rest-timer-info">
+      <span class="rest-timer-label">レスト</span>
+      <span class="rest-timer-time" id="restTimerTime">90</span>
+      <button class="rest-timer-skip" onclick="App.skipTimer()">スキップ</button>
     </div>
-    <div id="recordDate" class="record-date"></div>
-    <div id="recordContent"></div>
-    <button id="saveRecord" class="btn-primary hidden">Save Record</button>
-    <div id="recordMessage" class="message hidden"></div>
-  </section>
+  </div>
 
-  <!-- 進捗グラフ画面 -->
-  <section id="progress" class="tab-content">
-    <div class="screen-header">
-      <h1>Progress</h1>
-      <p class="screen-subtitle">成長の軌跡</p>
-    </div>
-    <div id="progressNotice" class="notice hidden">
-      <div class="notice-icon">&#9733;</div>
-      <p>トレーニング記録が蓄積されるとグラフが表示されます</p>
-    </div>
-    <div id="progressTabs" class="progress-tabs hidden"></div>
-    <div id="progressChart" class="chart-container hidden">
-      <canvas id="exerciseChart"></canvas>
-    </div>
-    <div id="progressStats" class="progress-stats hidden"></div>
-  </section>
-
-  <!-- 記録履歴画面 -->
-  <section id="history" class="tab-content">
-    <div class="screen-header">
-      <h1>History</h1>
-      <p class="screen-subtitle">過去の記録</p>
-    </div>
-    <div id="historyNotice" class="notice hidden">
-      <div class="notice-icon">&#128197;</div>
-      <p>まだトレーニング記録がありません</p>
-    </div>
-    <div id="historyContent"></div>
-  </section>
-
+  <!-- ボトムナビ -->
   <nav class="tab-nav">
-    <button class="tab-btn active" data-tab="profile">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-      <span>Profile</span>
-    </button>
-    <button class="tab-btn" data-tab="menu">
+    <button class="tab-btn active" data-tab="workout">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span>Today</span>
-    </button>
-    <button class="tab-btn" data-tab="record">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>Record</span>
+      <span>Workout</span>
     </button>
     <button class="tab-btn" data-tab="progress">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -189,10 +321,15 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span>History</span>
     </button>
+    <button class="tab-btn" data-tab="settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
   </nav>
 
   <script src="data/exercises.js"></script>
   <script src="data/programs.js"></script>
+  <script src="data/illustrations.js"></script>
   <script src="modules/profile.js"></script>
   <script src="modules/generator.js"></script>
   <script src="modules/recorder.js"></script>

@@ -276,6 +276,10 @@ body {
   margin-bottom: 16px;
 }
 
+.menu-summary.summary-2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .summary-item {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -551,6 +555,22 @@ body {
   color: var(--text);
 }
 
+.progress-category-label {
+  width: 100%;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 8px;
+  margin-bottom: 2px;
+  padding-left: 2px;
+}
+
+.progress-category-label:first-child {
+  margin-top: 0;
+}
+
 /* === Chart === */
 .chart-container {
   background: var(--bg-card);
@@ -635,6 +655,35 @@ body {
   font-weight: 400;
 }
 
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-delete {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.history-delete:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-dim);
+}
+
 .history-toggle {
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -687,6 +736,634 @@ body {
   font-size: 0.7rem;
   color: var(--accent);
   margin-top: 2px;
+}
+
+/* === Home: Week Progress === */
+.week-progress {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.week-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.week-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.week-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.week-dot {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+
+.week-dot.done {
+  background: var(--accent);
+}
+
+.week-dot.today {
+  background: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 3px var(--text-muted);
+}
+
+/* === Home: Next Workout === */
+.next-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.next-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.next-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* === Home: Section Title === */
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 20px 0 10px;
+}
+
+/* === Home: Recent Card === */
+.recent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recent-info-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.recent-info-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.recent-volume {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* === Workout: Exercise Card with Illustration === */
+.wk-exercise-inner {
+  display: flex;
+  gap: 12px;
+}
+
+.wk-exercise-illust {
+  width: 56px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  color: var(--accent);
+}
+
+.wk-exercise-illust svg {
+  width: 100%;
+  height: auto;
+}
+
+.wk-exercise-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* === Workout: Inline Set Check === */
+.wk-exercise {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.wk-exercise.completed {
+  border-color: rgba(74, 222, 128, 0.3);
+  opacity: 0.7;
+}
+
+.wk-exercise-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.wk-exercise-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.wk-exercise-target {
+  font-size: 0.65rem;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.wk-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wk-set-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.wk-set-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.wk-set-row input {
+  padding: 8px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-size: 0.85rem;
+  font-family: inherit;
+  text-align: center;
+  color: var(--text);
+  background: var(--bg-input);
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.wk-set-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.wk-check {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: transparent;
+  font-size: 0.8rem;
+}
+
+.wk-check.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a0a0a;
+}
+
+/* === Workout: Add Exercise Selector === */
+.add-exercise-area {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.add-exercise-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.add-exercise-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.wk-remove-btn {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: inherit;
+  line-height: 1;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.wk-remove-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-dim);
+}
+
+/* === Settings: Goal Group === */
+.goal-group {
+  margin-top: 12px;
+}
+
+/* === Settings: Outline Button === */
+.btn-outline {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* === Workout: Previous Record === */
+.wk-prev-record {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  padding: 4px 0;
+}
+
+.wk-prev-record span {
+  color: var(--text-secondary);
+}
+
+/* === Workout: Set Adjustment === */
+.wk-sets-control {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.wk-set-adjust {
+  flex: 1;
+  padding: 6px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wk-set-adjust:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* === Rest Timer === */
+.rest-timer {
+  position: fixed;
+  bottom: calc(var(--nav-height) + 8px);
+  left: 16px;
+  right: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  z-index: 99;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.rest-timer-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.rest-timer-progress {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.rest-timer-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rest-timer-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.rest-timer-time {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.rest-timer-skip {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rest-timer-skip:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* === Progress: Mode Toggle === */
+.progress-mode-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.progress-mode-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.progress-mode-btn.active {
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+/* === Guide Section === */
+.guide-section {
+  margin-top: 24px;
+}
+
+.guide-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.guide-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.guide-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.guide-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.guide-arrow {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+}
+
+.guide-item.open .guide-arrow {
+  transform: rotate(180deg);
+}
+
+.guide-body {
+  display: none;
+  padding: 0 16px 16px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.guide-item.open .guide-body {
+  display: block;
+}
+
+.guide-body ol,
+.guide-body ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.guide-body li {
+  margin-bottom: 6px;
+}
+
+.guide-body p {
+  margin: 8px 0;
+}
+
+.guide-formula {
+  background: var(--bg-input);
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px;
+  margin: 10px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.75rem;
+}
+
+.guide-table th,
+.guide-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.guide-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.guide-table td {
+  color: var(--text-secondary);
+}
+
+.guide-up { color: var(--accent); font-weight: 600; }
+.guide-same { color: var(--warning); font-weight: 600; }
+.guide-down { color: var(--danger); font-weight: 600; }
+
+.guide-example {
+  background: var(--bg-input);
+  padding: 10px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* === PR Badge & Glow === */
+.wk-exercise.pr-achieved {
+  border-color: #fbbf24;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);
+  animation: pr-glow 1.5s ease-in-out;
+}
+
+@keyframes pr-glow {
+  0% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); border-color: var(--border); }
+  40% { box-shadow: 0 0 35px rgba(251, 191, 36, 0.5); border-color: #fbbf24; }
+  100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.25); border-color: #fbbf24; }
+}
+
+.pr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #0a0a0a;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  letter-spacing: 0.05em;
+  animation: pr-badge-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pr-badge-pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* === Workout: Form Tip === */
+.wk-tip {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding: 6px 8px;
+  margin-top: 6px;
+  background: var(--bg-input);
+  border-radius: var(--radius-xs);
+  border-left: 2px solid var(--border);
 }
 
 /* === Utility === */

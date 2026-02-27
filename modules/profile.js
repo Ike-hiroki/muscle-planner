@@ -23,6 +23,7 @@ const ProfileManager = {
     document.getElementById('muscleMass').value = profile.muscleMass || '';
     document.getElementById('frequency').value = profile.frequency || '3';
     document.getElementById('level').value = profile.level || 'beginner';
+    document.getElementById('goal').value = profile.goal || 'hypertrophy';
   },
 
   getFormValues() {
@@ -35,6 +36,7 @@ const ProfileManager = {
       muscleMass: parseFloat(document.getElementById('muscleMass').value) || null,
       frequency: parseInt(document.getElementById('frequency').value),
       level: document.getElementById('level').value,
+      goal: document.getElementById('goal').value,
     };
   },
 
