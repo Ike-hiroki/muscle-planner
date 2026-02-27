@@ -5,123 +5,191 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muscle Planner</title>
   <meta name="description" content="筋トレメニュー自動生成 & 記録アプリ">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#0a0a0a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Muscle">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="app-header">
-    <h1 class="app-title">Muscle Planner</h1>
-  </header>
-
-  <nav class="tab-nav">
-    <button class="tab-btn active" data-tab="profile">プロフィール</button>
-    <button class="tab-btn" data-tab="menu">今日のメニュー</button>
-    <button class="tab-btn" data-tab="record">記録</button>
-    <button class="tab-btn" data-tab="history">履歴</button>
-  </nav>
-
   <!-- プロフィール設定画面 -->
   <section id="profile" class="tab-content active">
+    <div class="screen-header">
+      <h1>Profile</h1>
+      <p class="screen-subtitle">あなたの情報を入力</p>
+    </div>
     <div class="card">
-      <h2 class="card-title">基本情報</h2>
-      <div class="form-group">
-        <label for="height">身長 (cm)</label>
-        <input type="number" id="height" placeholder="170" min="100" max="250" step="0.1">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="height">身長 <span class="unit">cm</span></label>
+          <input type="number" id="height" placeholder="170" min="100" max="250" step="0.1">
+        </div>
+        <div class="form-group">
+          <label for="weight">体重 <span class="unit">kg</span></label>
+          <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="weight">体重 (kg)</label>
-        <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="age">年齢</label>
+          <input type="number" id="age" placeholder="25" min="10" max="100">
+        </div>
+        <div class="form-group">
+          <label for="gender">性別</label>
+          <select id="gender">
+            <option value="male">男性</option>
+            <option value="female">女性</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="age">年齢</label>
-        <input type="number" id="age" placeholder="25" min="10" max="100">
-      </div>
-      <div class="form-group">
-        <label for="gender">性別</label>
-        <select id="gender">
-          <option value="male">男性</option>
-          <option value="female">女性</option>
-        </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="bodyFat">体脂肪率 <span class="unit">%</span></label>
+          <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
+        </div>
+        <div class="form-group">
+          <label for="muscleMass">骨格筋量 <span class="unit">kg</span></label>
+          <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
+        </div>
       </div>
     </div>
 
     <div class="card">
-      <h2 class="card-title">体組成 <span class="optional">（任意）</span></h2>
-      <div class="form-group">
-        <label for="bodyFat">体脂肪率 (%)</label>
-        <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
-      </div>
-      <div class="form-group">
-        <label for="muscleMass">骨格筋量 (kg)</label>
-        <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 class="card-title">トレーニング設定</h2>
-      <div class="form-group">
-        <label for="frequency">週のトレーニング頻度</label>
-        <select id="frequency">
-          <option value="2">週2回</option>
-          <option value="3" selected>週3回</option>
-          <option value="4">週4回</option>
-          <option value="5">週5回</option>
-          <option value="6">週6回</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="level">トレーニング経験</label>
-        <select id="level">
-          <option value="beginner">初心者（〜1年）</option>
-          <option value="intermediate">中級者（1〜3年）</option>
-          <option value="advanced">上級者（3年〜）</option>
-        </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="frequency">頻度</label>
+          <select id="frequency">
+            <option value="2">週2回</option>
+            <option value="3" selected>週3回</option>
+            <option value="4">週4回</option>
+            <option value="5">週5回</option>
+            <option value="6">週6回</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="level">経験</label>
+          <select id="level">
+            <option value="beginner">初心者</option>
+            <option value="intermediate">中級者</option>
+            <option value="advanced">上級者</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <button id="saveProfile" class="btn-primary">プロフィールを保存</button>
+    <button id="saveProfile" class="btn-primary">メニューを生成</button>
     <div id="profileMessage" class="message hidden"></div>
   </section>
 
   <!-- 今日のメニュー画面 -->
   <section id="menu" class="tab-content">
+    <div class="screen-header">
+      <h1>Today</h1>
+      <p class="screen-subtitle">今日のトレーニング</p>
+    </div>
     <div id="menuNotice" class="notice hidden">
-      <p>プロフィールを設定してメニューを生成してください。</p>
-      <button class="btn-secondary" data-tab="profile">プロフィールを設定</button>
+      <div class="notice-icon">&#9881;</div>
+      <p>プロフィールを設定してメニューを生成してください</p>
+      <button class="btn-ghost" data-tab="profile">Setup Profile</button>
+    </div>
+    <div id="menuSummary" class="menu-summary hidden">
+      <div class="summary-item">
+        <span class="summary-value" id="menuExCount">0</span>
+        <span class="summary-label">種目</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-value" id="menuSetCount">0</span>
+        <span class="summary-label">セット</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-value" id="menuTime">0</span>
+        <span class="summary-label">分</span>
+      </div>
     </div>
     <div id="menuDaySelector" class="day-selector hidden">
-      <button id="prevDay" class="day-nav">&lt;</button>
+      <button id="prevDay" class="day-nav">&#8249;</button>
       <span id="currentDay" class="day-label">Day 1</span>
-      <button id="nextDay" class="day-nav">&gt;</button>
+      <button id="nextDay" class="day-nav">&#8250;</button>
     </div>
     <div id="menuContent"></div>
-    <button id="startTraining" class="btn-primary hidden">このメニューでトレーニング開始</button>
+    <button id="startTraining" class="btn-primary hidden">Start Training</button>
   </section>
 
   <!-- トレーニング記録画面 -->
   <section id="record" class="tab-content">
+    <div class="screen-header">
+      <h1>Record</h1>
+      <p class="screen-subtitle">トレーニングを記録</p>
+    </div>
     <div id="recordNotice" class="notice hidden">
-      <p>まずメニューを生成してからトレーニングを記録しましょう。</p>
+      <div class="notice-icon">&#9998;</div>
+      <p>メニューを生成してトレーニングを開始しましょう</p>
     </div>
     <div id="recordDate" class="record-date"></div>
     <div id="recordContent"></div>
-    <button id="saveRecord" class="btn-primary hidden">記録を保存</button>
+    <button id="saveRecord" class="btn-primary hidden">Save Record</button>
     <div id="recordMessage" class="message hidden"></div>
+  </section>
+
+  <!-- 進捗グラフ画面 -->
+  <section id="progress" class="tab-content">
+    <div class="screen-header">
+      <h1>Progress</h1>
+      <p class="screen-subtitle">成長の軌跡</p>
+    </div>
+    <div id="progressNotice" class="notice hidden">
+      <div class="notice-icon">&#9733;</div>
+      <p>トレーニング記録が蓄積されるとグラフが表示されます</p>
+    </div>
+    <div id="progressTabs" class="progress-tabs hidden"></div>
+    <div id="progressChart" class="chart-container hidden">
+      <canvas id="exerciseChart"></canvas>
+    </div>
+    <div id="progressStats" class="progress-stats hidden"></div>
   </section>
 
   <!-- 記録履歴画面 -->
   <section id="history" class="tab-content">
+    <div class="screen-header">
+      <h1>History</h1>
+      <p class="screen-subtitle">過去の記録</p>
+    </div>
     <div id="historyNotice" class="notice hidden">
-      <p>まだトレーニング記録がありません。</p>
+      <div class="notice-icon">&#128197;</div>
+      <p>まだトレーニング記録がありません</p>
     </div>
     <div id="historyContent"></div>
   </section>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+      <span>Profile</span>
+    </button>
+    <button class="tab-btn" data-tab="menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Today</span>
+    </button>
+    <button class="tab-btn" data-tab="record">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Record</span>
+    </button>
+    <button class="tab-btn" data-tab="progress">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Progress</span>
+    </button>
+    <button class="tab-btn" data-tab="history">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>History</span>
+    </button>
+  </nav>
 
   <script src="data/exercises.js"></script>
   <script src="data/programs.js"></script>

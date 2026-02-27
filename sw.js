@@ -1,5 +1,5 @@
 // Service Worker - オフライン対応 & キャッシュ管理
-const CACHE_NAME = 'muscle-planner-v1';
+const CACHE_NAME = 'muscle-planner-v2';
 const ASSETS = [
   './',
   './index.html',
