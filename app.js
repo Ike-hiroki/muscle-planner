@@ -172,16 +172,32 @@ const App = {
 
     const container = document.getElementById('workoutContent');
 
+    // スワイプヒント
+    const hintHtml = '<div class="swipe-hint"><span class="swipe-hint-arrow">&larr;</span> スワイプで種目を削除</div>';
+
     // 生成メニュー
-    const menuHtml = day.exercises.map((ex, i) => this.renderExCard(ex, i, false)).join('');
+    const menuHtml = day.exercises.map((ex, i) => this.wrapExCard(ex, i, false)).join('');
     // 追加種目
     const addedHtml = this.addedExercises.map((ex, i) => {
-      return this.renderExCard(ex, day.exercises.length + i, true);
+      return this.wrapExCard(ex, day.exercises.length + i, true);
     }).join('');
     // 種目追加セレクター
     const selectorHtml = this.buildExSelector(day);
 
-    container.innerHTML = menuHtml + addedHtml + selectorHtml;
+    container.innerHTML = hintHtml + menuHtml + addedHtml + selectorHtml;
+
+    // スワイプイベントをセットアップ
+    this.setupSwipe();
+  },
+
+  wrapExCard(ex, exIdx, isAdded) {
+    const cardHtml = this.renderExCard(ex, exIdx, isAdded);
+    return `
+      <div class="wk-exercise-wrapper" data-ex-idx="${exIdx}">
+        <div class="wk-exercise-delete-bg" onclick="App.deleteExercise(${exIdx})">削除</div>
+        ${cardHtml}
+      </div>
+    `;
   },
 
   renderExCard(ex, exIdx, isAdded) {
@@ -219,9 +235,7 @@ const App = {
     const adjustHtml = ex.weightReason && ex.weightReason !== '\u8a18\u9332\u306a\u3057\uff08\u521d\u56de\uff09'
       ? `<div class="exercise-adjustment ${ex.weightChange}">${ex.weightReason}</div>` : '';
 
-    const removeBtn = isAdded
-      ? `<button class="wk-remove-btn" onclick="App.removeAdded(${exIdx})" title="\u524a\u9664">\u00d7</button>`
-      : '';
+    const removeBtn = '';
 
     const exerciseData = EXERCISES[ex.id];
     const tipHtml = exerciseData && exerciseData.tip
@@ -878,6 +892,100 @@ const App = {
         btn.closest('.guide-item').classList.toggle('open');
       });
     });
+
+    // Settings セクション開閉
+    document.querySelectorAll('.settings-section-header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const section = btn.closest('.settings-section');
+        if (section.classList.contains('always-open')) return;
+        section.classList.toggle('open');
+      });
+    });
+
+    // Chip toggle
+    document.querySelectorAll('.chip-group .chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('selected');
+      });
+    });
+  },
+
+  // === SWIPE TO DELETE ===
+  setupSwipe() {
+    const container = document.getElementById('workoutContent');
+    if (!container) return;
+
+    let startX = 0, startY = 0, currentX = 0, swiping = false, activeWrapper = null;
+
+    container.addEventListener('touchstart', (e) => {
+      const wrapper = e.target.closest('.wk-exercise-wrapper');
+      if (!wrapper) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = 0;
+      swiping = false;
+      activeWrapper = wrapper;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (!activeWrapper) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+
+      // 水平移動が垂直より大きい場合のみスワイプ判定
+      if (!swiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        swiping = true;
+      }
+
+      if (!swiping) return;
+      e.preventDefault();
+
+      currentX = Math.min(0, dx); // 左方向のみ
+      const card = activeWrapper.querySelector('.wk-exercise');
+      if (card) {
+        card.style.transition = 'none';
+        card.style.transform = `translateX(${currentX}px)`;
+      }
+    }, { passive: false });
+
+    container.addEventListener('touchend', () => {
+      if (!activeWrapper) return;
+      const card = activeWrapper.querySelector('.wk-exercise');
+      if (!card) { activeWrapper = null; return; }
+
+      card.style.transition = 'transform 0.2s ease';
+
+      if (currentX < -80) {
+        // 削除ボタン表示状態で固定
+        card.style.transform = 'translateX(-80px)';
+        activeWrapper.classList.add('swiped');
+      } else {
+        card.style.transform = 'translateX(0)';
+        activeWrapper.classList.remove('swiped');
+      }
+      activeWrapper = null;
+      swiping = false;
+    }, { passive: true });
+  },
+
+  // スワイプ削除実行
+  deleteExercise(exIdx) {
+    const day = this.currentMenu.days[this.currentDayIndex];
+    if (exIdx < day.exercises.length) {
+      day.exercises.splice(exIdx, 1);
+      // メニューをlocalStorageに反映
+      const menu = MenuGenerator.getMenu();
+      if (menu && menu.days[this.currentDayIndex]) {
+        menu.days[this.currentDayIndex].exercises = day.exercises;
+        localStorage.setItem(MenuGenerator.STORAGE_KEY, JSON.stringify(menu));
+      }
+    } else {
+      const addedIdx = exIdx - day.exercises.length;
+      if (addedIdx >= 0 && addedIdx < this.addedExercises.length) {
+        this.addedExercises.splice(addedIdx, 1);
+      }
+    }
+    this.renderWorkout();
   }
 };
 

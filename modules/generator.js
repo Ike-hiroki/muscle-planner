@@ -69,8 +69,160 @@ const MenuGenerator = {
       }))
     };
 
+    // v7: パーソナライズパイプライン適用
+    this._applyPersonalization(menu, profile);
+
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(menu));
     return menu;
+  },
+
+  // === v7: パーソナライズパイプライン ===
+  _applyPersonalization(menu, profile) {
+    menu.days.forEach(day => {
+      // 1. 怪我フィルター
+      day.exercises = this._applyInjuryFilter(day.exercises, profile);
+      // 2. 器具好みフィルター
+      day.exercises = this._applyEquipmentPreference(day.exercises, profile);
+      // 3. 体バランス調整
+      this._applyBodyBalance(day.exercises, profile);
+      // 4. 重点部位調整
+      this._applyFocusParts(day.exercises, profile);
+      // 5. 時間制限
+      day.exercises = this._applySessionTimeLimit(day.exercises, profile);
+    });
+  },
+
+  // 1. 怪我のある部位に関連する種目を除外
+  _applyInjuryFilter(exercises, profile) {
+    const injuries = profile.injuries || [];
+    if (injuries.length === 0) return exercises;
+
+    return exercises.filter(ex => {
+      const data = EXERCISES[ex.id];
+      if (!data || !data.injuryRisk) return true;
+      // 怪我部位とリスク部位が重なる場合は除外
+      return !data.injuryRisk.some(risk => injuries.includes(risk));
+    });
+  },
+
+  // 2. 器具好みに応じて種目を代替
+  _applyEquipmentPreference(exercises, profile) {
+    const pref = profile.equipmentPref || 'balanced';
+    if (pref === 'balanced') return exercises;
+
+    const usedIds = new Set(exercises.map(e => e.id));
+
+    return exercises.map(ex => {
+      const data = EXERCISES[ex.id];
+      if (!data) return ex;
+
+      const sub = EQUIPMENT_SUBSTITUTIONS[ex.id];
+      if (!sub) return ex;
+
+      let replaceId = null;
+      if (pref === 'machine' && ['barbell', 'dumbbell'].includes(data.equipment) && sub.machine) {
+        replaceId = sub.machine;
+      } else if (pref === 'freeweight' && ['machine', 'cable'].includes(data.equipment) && sub.freeweight) {
+        replaceId = sub.freeweight;
+      }
+
+      if (!replaceId || usedIds.has(replaceId)) return ex;
+
+      const newData = EXERCISES[replaceId];
+      if (!newData) return ex;
+
+      usedIds.delete(ex.id);
+      usedIds.add(replaceId);
+
+      const goalConfig = GOAL_SETTINGS[profile.goal || 'hypertrophy'];
+      const typeConfig = newData.type === 'compound' ? goalConfig.compound : goalConfig.isolation;
+      const weight = this.calculateWeight(newData, profile, typeConfig.intensity);
+      const rest = newData.type === 'compound' ? goalConfig.restCompound : goalConfig.restIsolation;
+
+      return {
+        ...ex,
+        id: replaceId,
+        name: newData.name,
+        target: newData.target,
+        type: newData.type,
+        reps: newData.isTimeBased ? ex.reps : typeConfig.reps,
+        weight: weight,
+        weightIncrement: newData.weightIncrement,
+        rest: rest,
+        isTimeBased: newData.isTimeBased || false,
+      };
+    });
+  },
+
+  // 3. 上半身/下半身重視 → 該当カテゴリの種目にセット+1
+  _applyBodyBalance(exercises, profile) {
+    const balance = profile.bodyBalance || 'balanced';
+    if (balance === 'balanced') return;
+
+    const upperParts = ['胸', '肩', '腕', '背中'];
+    const lowerParts = ['脚'];
+
+    const targetParts = balance === 'upper' ? upperParts : lowerParts;
+
+    exercises.forEach(ex => {
+      const data = EXERCISES[ex.id];
+      if (data && targetParts.includes(data.bodyPart)) {
+        ex.sets = Math.min(6, ex.sets + 1);
+      }
+    });
+  },
+
+  // 4. 重点部位の種目にセット+1
+  _applyFocusParts(exercises, profile) {
+    const focusParts = profile.focusParts || [];
+    if (focusParts.length === 0) return;
+
+    exercises.forEach(ex => {
+      const data = EXERCISES[ex.id];
+      if (data && focusParts.includes(data.bodyPart)) {
+        ex.sets = Math.min(6, ex.sets + 1);
+      }
+    });
+  },
+
+  // 5. 希望時間を超えたらisolation種目から削除
+  _applySessionTimeLimit(exercises, profile) {
+    const limit = profile.sessionTime || 60;
+
+    const estimateMinutes = (exList) => {
+      let sec = 5 * 60; // ウォームアップ
+      exList.forEach(ex => {
+        sec += ex.sets * 50;
+        sec += (ex.sets - 1) * (ex.rest || 75);
+        sec += 150;
+      });
+      return Math.round(sec / 60);
+    };
+
+    let result = [...exercises];
+
+    // 制限を超えている場合、isolation種目を後ろから削除
+    while (result.length > 1 && estimateMinutes(result) > limit) {
+      // 後ろからisolation種目を探す
+      let removed = false;
+      for (let i = result.length - 1; i >= 0; i--) {
+        if (result[i].type === 'isolation') {
+          result.splice(i, 1);
+          removed = true;
+          break;
+        }
+      }
+      // isolation種目がなければcompoundを後ろから削除
+      if (!removed) {
+        if (result.length > 1) {
+          result.pop();
+        } else {
+          break;
+        }
+      }
+    }
+
+    return result;
   },
 
   // 重量計算（intensity省略時はprofile.goalから自動判定）

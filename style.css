@@ -1366,6 +1366,161 @@ body {
   border-left: 2px solid var(--border);
 }
 
+/* === Touch: Disable double-tap zoom === */
+button, input, select, .tab-btn, .wk-check, .wk-set-adjust, .chip, .day-nav {
+  touch-action: manipulation;
+}
+
+/* === Settings: Collapsible Sections === */
+.settings-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.settings-section-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.settings-section-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.settings-section-arrow {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+}
+
+.settings-section.open .settings-section-arrow {
+  transform: rotate(180deg);
+}
+
+.settings-section-body {
+  display: none;
+  padding: 0 16px 16px;
+}
+
+.settings-section.open .settings-section-body {
+  display: block;
+}
+
+.settings-section.always-open .settings-section-body {
+  display: block;
+}
+
+.settings-section.always-open .settings-section-header {
+  cursor: default;
+}
+
+.settings-section.always-open .settings-section-arrow {
+  display: none;
+}
+
+/* === Chip Multi-Select === */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chip.selected {
+  background: var(--accent);
+  color: #0a0a0a;
+  border-color: var(--accent);
+}
+
+.chip:hover:not(.selected) {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* === Swipe to Delete === */
+.wk-exercise-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border-radius: var(--radius);
+}
+
+.wk-exercise-wrapper .wk-exercise {
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+
+.wk-exercise-delete-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 80px;
+  background: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.swipe-hint {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  padding: 6px 0 10px;
+  animation: swipe-hint-fade 4s ease forwards;
+}
+
+.swipe-hint-arrow {
+  display: inline-block;
+  animation: swipe-hint-slide 1.5s ease-in-out 2;
+}
+
+@keyframes swipe-hint-slide {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-8px); }
+}
+
+@keyframes swipe-hint-fade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* === Utility === */
 .hidden {
   display: none !important;

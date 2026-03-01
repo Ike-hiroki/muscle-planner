@@ -102,75 +102,172 @@
       <h1>Settings</h1>
       <p class="screen-subtitle">プロフィール・トレーニング設定</p>
     </div>
-    <div class="card">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="height">身長 <span class="unit">cm</span></label>
-          <input type="number" id="height" placeholder="170" min="100" max="250" step="0.1">
+
+    <!-- セクション1: 基本情報（常時展開） -->
+    <div class="settings-section always-open open">
+      <button class="settings-section-header">
+        <span>基本情報</span>
+        <span class="settings-section-arrow">&#9662;</span>
+      </button>
+      <div class="settings-section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="height">身長 <span class="unit">cm</span></label>
+            <input type="number" id="height" placeholder="170" min="100" max="250" step="0.1">
+          </div>
+          <div class="form-group">
+            <label for="weight">体重 <span class="unit">kg</span></label>
+            <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="weight">体重 <span class="unit">kg</span></label>
-          <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="age">年齢</label>
-          <input type="number" id="age" placeholder="25" min="10" max="100">
-        </div>
-        <div class="form-group">
-          <label for="gender">性別</label>
-          <select id="gender">
-            <option value="male">男性</option>
-            <option value="female">女性</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="bodyFat">体脂肪率 <span class="unit">%（任意）</span></label>
-          <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
-        </div>
-        <div class="form-group">
-          <label for="muscleMass">骨格筋量 <span class="unit">kg（任意）</span></label>
-          <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="age">年齢</label>
+            <input type="number" id="age" placeholder="25" min="10" max="100">
+          </div>
+          <div class="form-group">
+            <label for="gender">性別</label>
+            <select id="gender">
+              <option value="male">男性</option>
+              <option value="female">女性</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
-    <button id="saveBodyComp" class="btn-outline">体組成を記録</button>
-    <div id="bodyCompMessage" class="message hidden"></div>
-    <div class="card">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="frequency">頻度</label>
-          <select id="frequency">
-            <option value="2">週2回</option>
-            <option value="3" selected>週3回</option>
-            <option value="4">週4回</option>
-            <option value="5">週5回</option>
-            <option value="6">週6回</option>
+
+    <!-- セクション2: トレーニング設定（常時展開） -->
+    <div class="settings-section always-open open">
+      <button class="settings-section-header">
+        <span>トレーニング設定</span>
+        <span class="settings-section-arrow">&#9662;</span>
+      </button>
+      <div class="settings-section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="frequency">頻度</label>
+            <select id="frequency">
+              <option value="2">週2回</option>
+              <option value="3" selected>週3回</option>
+              <option value="4">週4回</option>
+              <option value="5">週5回</option>
+              <option value="6">週6回</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="level">経験</label>
+            <select id="level">
+              <option value="beginner">初心者</option>
+              <option value="intermediate">中級者</option>
+              <option value="advanced">上級者</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group goal-group">
+          <label for="goal">トレーニング目標</label>
+          <select id="goal">
+            <option value="hypertrophy" selected>筋肥大（バランス型）</option>
+            <option value="strength">筋力アップ（高重量・低回数）</option>
+            <option value="endurance">持久力・引き締め（低重量・高回数）</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="level">経験</label>
-          <select id="level">
-            <option value="beginner">初心者</option>
-            <option value="intermediate">中級者</option>
-            <option value="advanced">上級者</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group goal-group">
-        <label for="goal">トレーニング目標</label>
-        <select id="goal">
-          <option value="hypertrophy" selected>筋肥大（バランス型）</option>
-          <option value="strength">筋力アップ（高重量・低回数）</option>
-          <option value="endurance">持久力・引き締め（低重量・高回数）</option>
-        </select>
       </div>
     </div>
+
+    <!-- セクション3: カスタマイズ（初期折りたたみ） -->
+    <div class="settings-section" id="customizeSection">
+      <button class="settings-section-header">
+        <span>カスタマイズ</span>
+        <span class="settings-section-arrow">&#9662;</span>
+      </button>
+      <div class="settings-section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sessionTime">1回の希望時間</label>
+            <select id="sessionTime">
+              <option value="30">30分</option>
+              <option value="45">45分</option>
+              <option value="60" selected>60分</option>
+              <option value="75">75分</option>
+              <option value="90">90分</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bodyBalance">体のバランス</label>
+            <select id="bodyBalance">
+              <option value="balanced" selected>全身均等</option>
+              <option value="upper">上半身重視</option>
+              <option value="lower">下半身重視</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="equipmentPref">器具の好み</label>
+          <select id="equipmentPref">
+            <option value="machine">マシン中心</option>
+            <option value="balanced" selected>バランス</option>
+            <option value="freeweight">フリーウェイト中心</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>重点部位（複数選択可）</label>
+          <div class="chip-group" id="focusParts">
+            <button type="button" class="chip" data-value="胸">胸</button>
+            <button type="button" class="chip" data-value="肩">肩</button>
+            <button type="button" class="chip" data-value="腕">腕</button>
+            <button type="button" class="chip" data-value="背中">背中</button>
+            <button type="button" class="chip" data-value="脚">脚</button>
+            <button type="button" class="chip" data-value="体幹">体幹</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>ケガ・制限のある部位（複数選択可）</label>
+          <div class="chip-group" id="injuries">
+            <button type="button" class="chip" data-value="肩">肩</button>
+            <button type="button" class="chip" data-value="腰">腰</button>
+            <button type="button" class="chip" data-value="膝">膝</button>
+            <button type="button" class="chip" data-value="手首">手首</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <button id="saveProfile" class="btn-primary">メニューを再生成</button>
     <div id="profileMessage" class="message hidden"></div>
+
+    <!-- セクション4: 体組成記録（常時展開） -->
+    <div class="settings-section always-open open" style="margin-top: 12px;">
+      <button class="settings-section-header">
+        <span>体組成記録</span>
+        <span class="settings-section-arrow">&#9662;</span>
+      </button>
+      <div class="settings-section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bodyFat">体脂肪率 <span class="unit">%（任意）</span></label>
+            <input type="number" id="bodyFat" placeholder="18" min="3" max="50" step="0.1">
+          </div>
+          <div class="form-group">
+            <label for="muscleMass">骨格筋量 <span class="unit">kg（任意）</span></label>
+            <input type="number" id="muscleMass" placeholder="30" min="10" max="60" step="0.1">
+          </div>
+        </div>
+        <button id="saveBodyComp" class="btn-outline" style="margin-top: 8px;">体組成を記録</button>
+        <div id="bodyCompMessage" class="message hidden"></div>
+      </div>
+    </div>
+
+    <!-- セクション5: データ管理（初期折りたたみ） -->
+    <div class="settings-section" id="dataManageSection">
+      <button class="settings-section-header">
+        <span>データ管理</span>
+        <span class="settings-section-arrow">&#9662;</span>
+      </button>
+      <div class="settings-section-body">
+        <button class="btn-outline" onclick="if(confirm('全てのトレーニング記録を削除しますか？')) { localStorage.removeItem('mp_records'); alert('記録を削除しました'); }">トレーニング記録を削除</button>
+        <button class="btn-outline" onclick="if(confirm('全てのデータをリセットしますか？')) { localStorage.clear(); location.reload(); }">全データをリセット</button>
+      </div>
+    </div>
 
     <!-- 使い方ガイド -->
     <div class="guide-section">
