@@ -1,18 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#2563eb"/>
-  <!-- ダンベル -->
-  <g transform="translate(256,256) rotate(-30)">
-    <!-- バー -->
-    <rect x="-120" y="-8" width="240" height="16" rx="8" fill="white"/>
-    <!-- 左プレート外 -->
-    <rect x="-160" y="-40" width="24" height="80" rx="6" fill="white" opacity="0.7"/>
-    <!-- 左プレート内 -->
-    <rect x="-136" y="-50" width="28" height="100" rx="6" fill="white"/>
-    <!-- 右プレート内 -->
-    <rect x="108" y="-50" width="28" height="100" rx="6" fill="white"/>
-    <!-- 右プレート外 -->
-    <rect x="136" y="-40" width="24" height="80" rx="6" fill="white" opacity="0.7"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="0 0 0 0 0.29
+                0 0 0 0 0.87
+                0 0 0 0 0.50
+                0 0 0 0.4 0" result="greenGlow"/>
+      <feMerge>
+        <feMergeNode in="greenGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+
+  <!-- Dumbbell with glow -->
+  <g transform="translate(256,256)" filter="url(#glow)">
+    <!-- Bar -->
+    <rect x="-88" y="-7" width="176" height="14" rx="7" fill="#4ade80"/>
+
+    <!-- Left grip collar -->
+    <rect x="-96" y="-12" width="10" height="24" rx="3" fill="#4ade80" opacity="0.7"/>
+
+    <!-- Left inner plate -->
+    <rect x="-124" y="-42" width="24" height="84" rx="7" fill="#4ade80" opacity="0.9"/>
+
+    <!-- Left outer plate -->
+    <rect x="-150" y="-30" width="20" height="60" rx="6" fill="#4ade80" opacity="0.5"/>
+
+    <!-- Right grip collar -->
+    <rect x="86" y="-12" width="10" height="24" rx="3" fill="#4ade80" opacity="0.7"/>
+
+    <!-- Right inner plate -->
+    <rect x="100" y="-42" width="24" height="84" rx="7" fill="#4ade80" opacity="0.9"/>
+
+    <!-- Right outer plate -->
+    <rect x="130" y="-30" width="20" height="60" rx="6" fill="#4ade80" opacity="0.5"/>
   </g>
-  <!-- テキスト -->
-  <text x="256" y="420" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="64" fill="white" opacity="0.9">MP</text>
 </svg>
